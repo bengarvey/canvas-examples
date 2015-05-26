@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta http-equiv="Content-Type" content="text/html;">
+  <title>Simple Canvas Example</title>
+
+  <style type="text/css" media="screen">
+    @import url(style.css);
+  </style>
+
+  </head>
+  <body>
+    <canvas id="map" height="600" width="800">
+      This is where the canvas would be if your browser supported it.
+    </canvas>
+  </body>
+
+  <script>
+
+    // Get the canvas element we need
+    drawing_canvas = document.getElementById('map');
+
+    // Initaliase a 2-dimensional drawing context
+    context = drawing_canvas.getContext('2d');
+
+    function drawCircle(x, y, radius, color) {
+      context.beginPath();
+      context.fillStyle = color;
+      context.arc(x, y, radius, 0, Math.PI*2, true);
+      context.closePath();
+      context.lineWidth = 0;
+      context.fill();
+    }
+
+    function drawLine(startX, startY, endX, endY, color) {
+      context.beginPath();
+      context.moveTo(startX, startY);
+      context.lineTo(endX,endY);
+      context.strokeStyle = color;
+      context.lineWidth = 1;
+      context.stroke();
+    }
+
+    function Planet(x, y, radius, color) {
+      this.x = x;
+      this.y = y;
+      this.radius = radius;
+      this.color = color;
+    }
+
+    function draw(planet, index, planets) {
+      drawCircle(planet.x, planet.y, planet.radius, planet.color);
+      if (index > 0) {
+        previous = planets[index-1];
+        drawLine(previous.x, previous.y, planet.x, planet.y, planet.color);
+      }
+    }
+
+    function generatePlanets(total) {
+      planets = [];
+      for(i=0; i<total; i++) {
+        x = Math.floor(Math.random() * 500);
+        y = Math.floor(Math.random() * 500);
+        radius = Math.floor(Math.random() * 10) + 5;
+        color = '#'+Math.floor(Math.random()*16777215).toString(16);
+        planets.push(new Planet(x, y, radius, color));
+      }
+      return planets;
+    }
+
+    planets = generatePlanets(20);
+    planets.forEach(draw);
+
+  </script>
+
+</html>

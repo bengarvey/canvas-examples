@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta http-equiv="Content-Type" content="text/html;">
+  <title>Simple Canvas Example</title>
+
+  <style type="text/css" media="screen">
+    @import url(style.css);
+  </style>
+
+  </head>
+  <body>
+    <canvas id="map" height="600" width="800">
+      This is where the canvas would be if your browser supported it.
+    </canvas>
+  </body>
+
+  <script>
+
+    WORLD_HEIGHT = 600;
+    WORLD_WIDTH = 800;
+
+    // Get the canvas element we need
+    drawing_canvas = document.getElementById('map');
+
+    // Initaliase a 2-dimensional drawing context
+    context = drawing_canvas.getContext('2d');
+
+    function drawCircle(x, y, radius, color) {
+      context.beginPath();
+      context.fillStyle = color;
+      context.arc(x, y, radius, 0, Math.PI*2, true);
+      context.closePath();
+      context.lineWidth = 0;
+      context.fill();
+    }
+
+    function drawLine(startX, startY, endX, endY, color) {
+      context.beginPath();
+      context.moveTo(startX, startY);
+      context.lineTo(endX,endY);
+      context.strokeStyle = color;
+      context.lineWidth = 1;
+      context.stroke();
+    }
+
+    function Planet(x, y, dx, dy, radius, color) {
+      this.x = x;
+      this.y = y;
+      this.dx = dx;
+      this.dy = dy;
+      this.radius = radius;
+      this.color = color;
+    }
+
+    function draw(planet, index, planets) {
+      drawCircle(planet.x, planet.y, planet.radius, planet.color);
+      if (index > 0) {
+        previous = planets[index-1];
+        drawLine(previous.x, previous.y, planet.x, planet.y, planet.color);
+      }
+    }
+
+    function move(planet) {
+      planet.x += planet.dx;
+      planet.y += planet.dy;
+
+      // boundary check
+      if (planet.x < 0) {
+        planet.dx *= -1;
+        planet.x = 0;
+      }
+      else if (planet.x > WORLD_WIDTH) {
+        planet.x = WORLD_WIDTH;
+        planet.dx *= -1;
+      }
+
+      if (planet.y < 0) {
+        planet.y = 0;
+        planet.dy *= -1;
+      }
+      else if (planet.y > WORLD_HEIGHT) {
+        planet.y = WORLD_HEIGHT;
+        planet.dy *= -1;
+      }
+
+    }
+
+    function generatePlanets(total) {
+      planets = [];
+      for(i=0; i<total; i++) {
+        x = Math.floor(Math.random() * WORLD_WIDTH);
+        y = Math.floor(Math.random() * WORLD_HEIGHT);
+        dx = Math.floor(Math.random() * 4) - 2;
+        dy = Math.floor(Math.random() * 4) - 2;
+        radius = Math.floor(Math.random() * 10) + 5;
+        color = '#'+Math.floor(Math.random()*16777215).toString(16);
+        planets.push(new Planet(x, y, dx, dy, radius, color));
+      }
+      return planets;
+    }
+
+    function clearCanvas() {
+      context.clearRect(0,0,WORLD_WIDTH, WORLD_HEIGHT);
+    }
+
+    function update() {
+      planets.forEach(move);
+      //clearCanvas();
+      planets.forEach(draw);
+    }
+
+    planets = generatePlanets(20);
+    setInterval( update, 10);
+
+  </script>
+
+</html>

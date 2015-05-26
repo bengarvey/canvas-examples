@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta http-equiv="Content-Type" content="text/html;">
+  <title>Simple Canvas Example</title>
+
+  <style type="text/css" media="screen">
+    @import url(style.css);
+  </style>
+
+  </head>
+  <body>
+    <canvas id="map" height="600" width="800">
+      This is where the canvas would be if your browser supported it.
+    </canvas>
+  </body>
+
+  <script>
+    // Get the canvas element we need
+    drawing_canvas = document.getElementById('map');
+
+    // Initaliase a 2-dimensional drawing context
+    context = drawing_canvas.getContext('2d');
+
+    // Draw a circle
+    context.beginPath();
+    context.fillStyle = "#38F";
+    context.arc(100, 100, 50, 0, Math.PI*2, true);
+    context.closePath();
+    context.lineWidth = 0;
+    context.fill();
+
+    // Draw a line
+    context.beginPath();
+    context.moveTo(100,400);
+    context.lineTo(200,50);
+    context.strokeStyle = "#F33";
+    context.lineWidth = 10;
+    context.stroke();
+  </script>
+
+</html>
