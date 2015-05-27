@@ -101,12 +101,12 @@
 
     function update() {
       planets.forEach(move);
-      // clearCanvas();
+      clearCanvas();
       planets.forEach(draw);
     }
 
-    planets = generatePlanets(20);
-    setInterval( update, 1000);
+    planets = generatePlanets(100);
+    setInterval( update, 10);
 
   </script>
 
